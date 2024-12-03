@@ -23,7 +23,40 @@ def report_is_safe(report):
             return safe
     return safe
 
-if __name__ == "__main__":
-    reports = get_reports_from_file("/home/fl/PycharmProjects/AOC2024/day_two/sample.txt")
+def report_is_safe_with_one_less_level(report):
+    # We will start by brute forcing it and see if we can improve later.pop
+    for i in range(len(report)):
+        test_report = report.copy()
+        test_report.pop(i)
+        if report_is_safe(test_report):
+            return True
+    return False
+
+def part_one():
+    reports = get_reports_from_file("/home/fl/PycharmProjects/AOC2024/day_two/input.txt")
+    nb_of_safe_reports = 0
     for report in reports:
-        print(report_is_safe(report))
+        if report_is_safe(report):
+            nb_of_safe_reports += 1
+
+    print(f"[PART ONE] - There are {nb_of_safe_reports} safe reports.")
+
+def part_two():
+    reports = get_reports_from_file("/home/fl/PycharmProjects/AOC2024/day_two/input.txt")
+    safe_reports = []
+    for report in reports:
+        if report_is_safe(report):
+            safe_reports.append(report)
+        else:
+            if report_is_safe_with_one_less_level(report):
+                safe_reports.append(report)
+
+    print(f"[PART TWO] - There are {len(safe_reports)} using the Problem Dampener")
+
+
+
+
+if __name__ == "__main__":
+    part_one()
+    part_two()
+
