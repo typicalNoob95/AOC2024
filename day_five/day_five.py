@@ -1,6 +1,5 @@
 import math
 
-
 class OrderingRule:
     def __init__(self, line):
         pages = line.replace("\n", "").split("|")
@@ -34,9 +33,6 @@ class Update:
                         if page_index > lowest_pages_after_index:
                             self.pages.insert(lowest_pages_after_index, self.pages.pop(page_index))
 
-
-
-
 def parse_input(filepath: str) -> (list[OrderingRule], list[Update]):
     ordering_rules = []
     updates = []
@@ -69,45 +65,21 @@ def get_ordered_and_unordered_updates(updates: list[Update], ordering_rules_per_
     rightly_ordered_updates = []
     unordered_updates = []
     for update in updates:
-        update_is_rightly_ordered = True
-        for page in update.pages:
-            pages_after = ordering_rules_per_page.get(page)
-            # Verification that there is at least one page ordering rule for this page
-            if pages_after != None:
-                page_index = update.pages.index(page)
-                if not all(page_index < update.pages.index(page_after) for page_after in pages_after if
-                           page_after in update.pages):
-                    update_is_rightly_ordered = False
-                    break
-
-        if update_is_rightly_ordered:
+        if update.is_sorted(ordering_rules_per_page):
             rightly_ordered_updates.append(update)
         else:
             unordered_updates.append(update)
 
     return rightly_ordered_updates, unordered_updates
 
-def part_one(ordering_rules_per_page: dict, rightly_ordered_updates: list[Update]) -> None:
+def calculate_sum_of_middle_pages(updates: list[Update]) -> int:
     sum_of_middle_pages = 0
-    for update in rightly_ordered_updates:
+    for update in updates:
         number_of_pages = len(update.pages)
         # Assuming always an uneven number of pages
-        middle_page_index = math.floor(number_of_pages/2)
+        middle_page_index = math.floor(number_of_pages / 2)
         sum_of_middle_pages += update.pages[middle_page_index]
-
-    print(f"[PART ONE] - The sum of the middle pages is: {sum_of_middle_pages}")
-
-def part_two(ordering_rules_per_page: dict, unordered_updates: list[Update]) -> None:
-    for update in unordered_updates:
-        update.sort(ordering_rules_per_page)
-    sum_of_middle_pages = 0
-    for update in unordered_updates:
-        number_of_pages = len(update.pages)
-        # Assuming always an uneven number of pages
-        middle_page_index = math.floor(number_of_pages/2)
-        sum_of_middle_pages += update.pages[middle_page_index]
-
-    print(f"[PART TWO] - The sum of the middle pages is: {sum_of_middle_pages}")
+    return sum_of_middle_pages
 
 if __name__ == "__main__":
     filepath = "/home/fl/PycharmProjects/AOC2024/day_five/input.txt"
@@ -116,6 +88,7 @@ if __name__ == "__main__":
     ordering_rules_per_page = get_ordering_rules_per_page(ordering_rules)
     rightly_ordered_updates, unordered_updates = get_ordered_and_unordered_updates(updates, ordering_rules_per_page)
 
-    part_one(ordering_rules_per_page, rightly_ordered_updates)
-    part_two(ordering_rules_per_page, unordered_updates)
-
+    print(f"[PART ONE] - The sum of the middle pages is: {calculate_sum_of_middle_pages(rightly_ordered_updates)}")
+    for update in unordered_updates:
+        update.sort(ordering_rules_per_page)
+    print(f"[PART TWO] - The sum of the middle pages is: {calculate_sum_of_middle_pages(unordered_updates)}")
