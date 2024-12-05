@@ -1,3 +1,6 @@
+from aoc_utils.performance import print_duration
+
+
 def get_both_lists(filepath):
     left_list = []
     right_list = []
@@ -18,10 +21,10 @@ def part_one():
     left_list, right_list = get_both_lists("/home/fl/PycharmProjects/AOC2024/day_one/input.txt")
     total_distance = 0
     for i in range(len(left_list)):
-        print(f"left: {left_list[i]}, right: {right_list[i]}")
+        #print(f"left: {left_list[i]}, right: {right_list[i]}")
         distance = abs(left_list[i] - right_list[i])
         total_distance += distance
-        print(f"distance: {distance}")
+        #print(f"distance: {distance}")
 
     print(f"total distance = {total_distance}")
 
@@ -37,7 +40,7 @@ def count_occurences_in_rgiht_list(right_list):
 def part_two():
     left_list, right_list = get_both_lists("/home/fl/PycharmProjects/AOC2024/day_one/input.txt")
     similarity_dict = count_occurences_in_rgiht_list(right_list)
-    print(similarity_dict)
+    #print(similarity_dict)
     similarity_score = 0
 
     for location_id in left_list:
@@ -50,5 +53,7 @@ def part_two():
 
 
 if __name__ == "__main__":
-    #part_one()
-    part_two()
+    import aoc_utils.performance
+
+    print_duration(part_one, "one")
+    print_duration(part_two, "two")
