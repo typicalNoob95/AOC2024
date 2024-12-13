@@ -114,5 +114,7 @@ def part_two(disk):
 
 if __name__ == "__main__":
     disk = get_disk_configuration("/home/fl/PycharmProjects/AOC2024/day_nine/input.txt")
-    #part_one(disk)
-    part_two(disk)
+    part_one_disk = copy.deepcopy(disk)
+    part_two_disk = copy.deepcopy(disk)
+    part_one(part_one_disk)
+    part_two(part_two_disk)
